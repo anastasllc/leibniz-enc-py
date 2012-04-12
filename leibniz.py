@@ -47,10 +47,10 @@ class leibniz:
 		"""uses Python's String.maketrans() to create one substitution cypher per given alphabet to be used for decryption"""
 		self.decryption_tables = [maketrans(a, default_alphabet) for a in alphabets]
 		
-	def encrypt(self, message):
-		"""encrypts the given string according to Leibniz' algorithm"""
+	def encrypt(self, message, starting_alphabet = 0):
+		"""encrypts the given string according to Leibniz' algorithm, optionally choosing which alphabet to start with (zero-indexed)"""
 		message = message.upper()
-		which_alphabet = 0
+		which_alphabet = int(starting_alphabet)
 		encrypted_message = []
 		
 		for i in range(0,len(message)):
@@ -59,10 +59,10 @@ class leibniz:
 
 		return ''.join(encrypted_message)
 
-	def decrypt(self, message):
-		"""decrypts the given string according to Leibniz' algorithm"""
+	def decrypt(self, message, starting_alphabet = 0):
+		"""decrypts the given string according to Leibniz' algorithm, optionally choosing which alphabet to start with (zero-indexed)"""
 		message = message.upper()
-		which_alphabet = 0
+		which_alphabet = int(starting_alphabet)
 		decrypted_message = []
 		
 		for i in range(0,len(message)):
@@ -73,7 +73,7 @@ class leibniz:
 
 def main():
 	if len(sys.argv) < 3:
-	   print "Usage: ", sys.argv[0], " encypt|decrypt message [gear [alphabets [delimiter = ';']]]"
+	   print "Usage: ", sys.argv[0], " encypt|decrypt message [starting_alphabet [gear [alphabets [delimiter = ';']]]]"
 	   print ""
 	   print "Any optional arguments not given on the command line will be read from the corresponding text files on disk."
 
@@ -86,18 +86,33 @@ def main():
 			print leb.decrypt(sys.argv[2])
 
 	elif len(sys.argv) == 4:
-		leb.set_gear(sys.argv[3])
-		print leb.encrypt(sys.argv[2])
+		if sys.argv[1] == "encrypt":
+			print leb.encrypt(sys.argv[2], sys.argv[3])
+		elif sys.argv[1] == "decrypt":
+			print leb.decrypt(sys.argv[2], sys.argv[3])
 
 	elif len(sys.argv) == 5:
-		leb.set_gear(sys.argv[3])
-		leb.set_alphabets(sys.argv[4], ';')
-		print leb.encrypt(sys.argv[2])
+		leb.set_gear(sys.argv[4])
+		if sys.argv[1] == "encrypt":
+			print leb.encrypt(sys.argv[2], sys.argv[3])
+		elif sys.argv[1] == "decrypt":
+			print leb.decrypt(sys.argv[2], sys.argv[3])
 
-	elif len(sys.argv) == 5:
-		leb.set_gear(sys.argv[3])
-		leb.set_alphabets(sys.argv[4], sys.argv[5])
-		print leb.encrypt(sys.argv[2])
+	elif len(sys.argv) == 6:
+		leb.set_gear(sys.argv[4])
+		leb.set_alphabets(sys.argv[5], ';')
+		if sys.argv[1] == "encrypt":
+			print leb.encrypt(sys.argv[2], sys.argv[3])
+		elif sys.argv[1] == "decrypt":
+			print leb.decrypt(sys.argv[2], sys.argv[3])
+
+	elif len(sys.argv) == 7:
+		leb.set_gear(sys.argv[4])
+		leb.set_alphabets(sys.argv[5], sys.argv[6])
+		if sys.argv[1] == "encrypt":
+			print leb.encrypt(sys.argv[2], sys.argv[3])
+		elif sys.argv[1] == "decrypt":
+			print leb.decrypt(sys.argv[2], sys.argv[3])
 
 
 if __name__ == "__main__":
