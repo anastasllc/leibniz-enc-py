@@ -18,16 +18,25 @@ class leibniz:
 
 		self.create_encryption_tables(self.default_alphabet, self.alphabets)
 		self.create_decryption_tables(self.default_alphabet, self.alphabets)
-		
+
+	def get_file_contents(self, filename):
+		f = open(filename, 'r');
+		fdata = f.read()
+		f.close()
+		return fdata
+
+	def set_file_contents(self, filename, fdata):
+		f = open(filename, 'w')
+		f.write(fdata)
+		f.close()
+
 	def set_alphabets(self, alph, delimiter='\n'):
 		"""splits a given string into alphabets using the given delimeter (default value of newline character) and saves is as an object parameter"""
 		self.alphabets = [a.upper() for a in alph.split(delimiter)]
 
 	def set_alphabets_from_file(self, filename = 'cyphers.txt'):
 		"""reads alphabets into a string from a file (default filename cyphers.txt) and passes that string to self.set_alphabets()"""
-		f = open(filename, 'r');
-		self.set_alphabets(f.read())
-		f.close()
+		self.set_alphabets(self.get_file_contents(filename))
 
 	def set_gear(self, gear):
 		"""simple setter method for the variable represneting the Leibniz gear, a string of binary digits"""
@@ -35,9 +44,7 @@ class leibniz:
 
 	def set_gear_from_file(self, filename = 'gear.txt'):
 		"""reads the Leibniz gear string from a file (by default, gear.txt) and passes that string to self.set_gear()"""
-		f = open(filename, 'r');
-		self.set_gear(f.read())
-		f.close()
+		self.set_gear(self.get_file_contents(filename))
 		
 	def create_encryption_tables(self, default_alphabet, alphabets):
 		"""uses Python's String.maketrans() to create one substitution cypher per given alphabet to be used for encryption"""
