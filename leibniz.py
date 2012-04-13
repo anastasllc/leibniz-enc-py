@@ -5,6 +5,7 @@ class leibniz:
 	def __init__(self, gear = None, alphabets_string = None, alphabet_delimiter = '\n', default_alphabet = "ABCDEFGHIKLMNOPQRSTUWXYZ"):
 		"""constructs class and either sets or reads from disk the alphabets and gear to be used, with the default character set as an optional parameter with default value set to the Latin alphabet used in Leibiz' time"""
 		self.default_alphabet = default_alphabet
+		self.starting_alphabet = 0
 		
 		if gear is None:
 			self.set_gear_from_file()
@@ -38,6 +39,10 @@ class leibniz:
 		"""reads alphabets into a string from a file (default filename cyphers.txt) and passes that string to self.set_alphabets()"""
 		self.set_alphabets(self.get_file_contents(filename))
 
+	def set_starting_alphabet(self, index):
+		"""sets which alphabet to start with"""
+		self.starting_alphabet = int(index)
+
 	def set_gear(self, gear):
 		"""simple setter method for the variable represneting the Leibniz gear, a string of binary digits"""
 		self.gear = gear
@@ -54,10 +59,10 @@ class leibniz:
 		"""uses Python's String.maketrans() to create one substitution cypher per given alphabet to be used for decryption"""
 		self.decryption_tables = [maketrans(a, default_alphabet) for a in alphabets]
 		
-	def encrypt(self, message, starting_alphabet = 0):
+	def encrypt(self, message):
 		"""encrypts the given string according to Leibniz' algorithm, optionally choosing which alphabet to start with (zero-indexed)"""
 		message = message.upper()
-		which_alphabet = int(starting_alphabet)
+		which_alphabet = self.starting_alphabet
 		encrypted_message = []
 		
 		for i in range(0,len(message)):
@@ -66,10 +71,10 @@ class leibniz:
 
 		return ''.join(encrypted_message)
 
-	def decrypt(self, message, starting_alphabet = 0):
+	def decrypt(self, message):
 		"""decrypts the given string according to Leibniz' algorithm, optionally choosing which alphabet to start with (zero-indexed)"""
 		message = message.upper()
-		which_alphabet = int(starting_alphabet)
+		which_alphabet = self.starting_alphabet
 		decrypted_message = []
 		
 		for i in range(0,len(message)):
@@ -93,33 +98,37 @@ def main():
 			print leb.decrypt(sys.argv[2])
 
 	elif len(sys.argv) == 4:
+		leb.set_starting_alphabet(sys.argv[3])
 		if sys.argv[1] == "encrypt":
-			print leb.encrypt(sys.argv[2], sys.argv[3])
+			print leb.encrypt(sys.argv[2])
 		elif sys.argv[1] == "decrypt":
-			print leb.decrypt(sys.argv[2], sys.argv[3])
+			print leb.decrypt(sys.argv[2])
 
 	elif len(sys.argv) == 5:
+		leb.set_starting_alphabet(sys.argv[3])
 		leb.set_gear(sys.argv[4])
 		if sys.argv[1] == "encrypt":
-			print leb.encrypt(sys.argv[2], sys.argv[3])
+			print leb.encrypt(sys.argv[2])
 		elif sys.argv[1] == "decrypt":
-			print leb.decrypt(sys.argv[2], sys.argv[3])
+			print leb.decrypt(sys.argv[2])
 
 	elif len(sys.argv) == 6:
+		leb.set_starting_alphabet(sys.argv[3])
 		leb.set_gear(sys.argv[4])
 		leb.set_alphabets(sys.argv[5], ';')
 		if sys.argv[1] == "encrypt":
-			print leb.encrypt(sys.argv[2], sys.argv[3])
+			print leb.encrypt(sys.argv[2])
 		elif sys.argv[1] == "decrypt":
-			print leb.decrypt(sys.argv[2], sys.argv[3])
+			print leb.decrypt(sys.argv[2])
 
 	elif len(sys.argv) == 7:
+		leb.set_starting_alphabet(sys.argv[3])
 		leb.set_gear(sys.argv[4])
 		leb.set_alphabets(sys.argv[5], sys.argv[6])
 		if sys.argv[1] == "encrypt":
-			print leb.encrypt(sys.argv[2], sys.argv[3])
+			print leb.encrypt(sys.argv[2])
 		elif sys.argv[1] == "decrypt":
-			print leb.decrypt(sys.argv[2], sys.argv[3])
+			print leb.decrypt(sys.argv[2])
 
 if __name__ == "__main__":
 	main()

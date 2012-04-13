@@ -87,7 +87,8 @@ class MainWindow(wx.Frame):
         menuAbout = helpmenu.Append(wx.ID_ABOUT, "&About"," About this program")
         menuSetGear = filemenu.Append(wx.ID_ANY, "Set &Gear..."," Print")
         menuSetAlphabets = filemenu.Append(wx.ID_ANY, "Set &Alphabets..."," Set Alphabets...")
-        menuPrint = filemenu.Append(wx.ID_PRINT, "&Print"," Set Alphabets")
+		menuSetStartingAlphabet = filemenu.Append(wx.ID_ANY, "Set &Starting Alphabet..."," Set Starting Alphabet...")
+        menuPrint = filemenu.Append(wx.ID_PRINT, "&Print..."," Set Alphabets")
         menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Exit program")
         
         menuBar = wx.MenuBar()
@@ -100,6 +101,7 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
         self.Bind(wx.EVT_MENU, self.SetGear, menuSetGear)
         self.Bind(wx.EVT_MENU, self.SetAlphabets, menuSetAlphabets)
+		self.Bind(wx.EVT_MENU, self.SetStartingAlphabet, menuSetStartingAlphabet)
 
     def SetGear(self, e):
     	ted = wx.TextEntryDialog(self, "Set Leibniz Gear:","Set Leibniz Gear",defaultValue = self.leb.get_file_contents('gear.txt'))
@@ -113,6 +115,12 @@ class MainWindow(wx.Frame):
     	ted.ShowModal()
     	self.leb.set_alphabets(ted.GetValue())
     	self.leb.set_file_contents('cyphers.txt', ted.GetValue())
+    	ted.Destroy()
+
+    def SetStartingAlphabet(self, e):
+    	ted = wx.TextEntryDialog(self, "Set Starting Alphabet (1-6):", "Set Starting Alphabet", defaultValue = "0"),style=wx.TE_MULTILINE|wx.OK|wx.CANCEL)
+    	ted.ShowModal()
+    	self.leb.set_starting_alphabet(ted.GetValue())
     	ted.Destroy()
 
     def OnAbout(self,e):
