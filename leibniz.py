@@ -2,9 +2,9 @@ import sys
 from string import maketrans,translate
 
 class leibniz:
-	def __init__(self, gear = None, alphabets_string = None, alphabet_delimiter = '\n', default_alphabet = "ABCDEFGHIKLMNOPQRSTUWXYZ"):
+	def __init__(self, gear = None, alphabets_string = None, alphabet_delimiter = '\n', default_alphabet = "ABCDEFGHIKLMNOPQRSTUWXYZ \n"):
 		"""constructs class and either sets or reads from disk the alphabets and gear to be used, with the default character set as an optional parameter with default value set to the Latin alphabet used in Leibiz' time"""
-		self.default_alphabet = default_alphabet
+		self.default_alphabet = unicode(default_alphabet)
 		self.starting_alphabet = 0
 		
 		if gear is None:
@@ -33,7 +33,13 @@ class leibniz:
 
 	def set_alphabets(self, alph, delimiter='\n'):
 		"""splits a given string into alphabets using the given delimeter (default value of newline character) and saves is as an object parameter"""
-		self.alphabets = [a.upper() for a in alph.split(delimiter)]
+		alphabets = alph.split(delimiter)
+		appended_alphabets = []
+		for a in alphabets:
+			appended_alphabets.append(a + "JV")
+		print alphabets
+		self.alphabets = [unicode(a.upper()) for a in appended_alphabets]
+		print self.alphabets
 
 	def set_alphabets_from_file(self, filename = 'cyphers.txt'):
 		"""reads alphabets into a string from a file (default filename cyphers.txt) and passes that string to self.set_alphabets()"""
@@ -53,15 +59,15 @@ class leibniz:
 		
 	def create_encryption_tables(self, default_alphabet, alphabets):
 		"""uses Python's String.maketrans() to create one substitution cypher per given alphabet to be used for encryption"""
-		self.encryption_tables = [maketrans(default_alphabet, a) for a in alphabets]
+		self.encryption_tables = [dict((ord(x), y) for (x, y) in zip(default_alphabet, a)) for a in alphabets]
 
 	def create_decryption_tables(self, default_alphabet, alphabets):
 		"""uses Python's String.maketrans() to create one substitution cypher per given alphabet to be used for decryption"""
-		self.decryption_tables = [maketrans(a, default_alphabet) for a in alphabets]
+		self.decryption_tables = [dict((ord(x), y) for (x, y) in zip(a,default_alphabet)) for a in alphabets]
 		
 	def encrypt(self, message):
 		"""encrypts the given string according to Leibniz' algorithm, optionally choosing which alphabet to start with (zero-indexed)"""
-		message = message.upper()
+		message = unicode(message).upper()
 		which_alphabet = self.starting_alphabet
 		encrypted_message = []
 		
@@ -73,7 +79,7 @@ class leibniz:
 
 	def decrypt(self, message):
 		"""decrypts the given string according to Leibniz' algorithm, optionally choosing which alphabet to start with (zero-indexed)"""
-		message = message.upper()
+		message = unicode(message).upper()
 		which_alphabet = self.starting_alphabet
 		decrypted_message = []
 		
