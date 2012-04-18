@@ -37,13 +37,15 @@ class leibniz:
 		appended_alphabets = []
 		for a in alphabets:
 			appended_alphabets.append(a + "JV")
-		print alphabets
 		self.alphabets = [unicode(a.upper()) for a in appended_alphabets]
-		print self.alphabets
 
 	def set_alphabets_from_file(self, filename = 'cyphers.txt'):
 		"""reads alphabets into a string from a file (default filename cyphers.txt) and passes that string to self.set_alphabets()"""
-		self.set_alphabets(self.get_file_contents(filename))
+		try:
+			self.set_alphabets(self.get_file_contents(filename))
+		except IOError:
+			self.set_file_contents(filename, "ABCDEFGHIKLMNOPQRSTUWXYZ\nBCDEFGHIKLMNOPQRSTUWXYZA\nABCDEFGHIKLMNOPQRSTUWXYZ\nBCDEFGHIKLMNOPQRSTUWXYZA\nABCDEFGHIKLMNOPQRSTUWXYZ\nBCDEFGHIKLMNOPQRSTUWXYZA")
+			self.set_alphabets(self.get_file_contents(filename))
 
 	def set_starting_alphabet(self, index):
 		"""sets which alphabet to start with"""
@@ -55,7 +57,11 @@ class leibniz:
 
 	def set_gear_from_file(self, filename = 'gear.txt'):
 		"""reads the Leibniz gear string from a file (by default, gear.txt) and passes that string to self.set_gear()"""
-		self.set_gear(self.get_file_contents(filename))
+		try:
+			self.set_gear(self.get_file_contents(filename))
+		except IOError:
+			self.set_file_contents(filename,"101010");
+			self.set_gear(self.get_file_contents(filename))
 		
 	def create_encryption_tables(self, default_alphabet, alphabets):
 		"""uses Python's String.maketrans() to create one substitution cypher per given alphabet to be used for encryption"""
@@ -86,7 +92,7 @@ class leibniz:
 		for i in range(0,len(message)):
 			decrypted_message.append(message[i].translate(self.decryption_tables[which_alphabet % len(self.decryption_tables)]))
 			which_alphabet = (which_alphabet + int(self.gear[i % len(self.gear)])) % len(self.alphabets)
-
+		
 		return ''.join(decrypted_message)
 
 def main():

@@ -1,4 +1,4 @@
-import leibniz
+from leibniz import *
 import wx
 from wx.html import HtmlEasyPrinting
 
@@ -82,25 +82,25 @@ class MainWindow(wx.Frame):
     	self.decrypted.SetValue(self.leb.decrypt(message))
 
     def setup_menu(self):
-        filemenu = wx.Menu()
-        helpmenu = wx.Menu()
-        menuAbout = helpmenu.Append(wx.ID_ABOUT, "&About"," About this program")
-        menuSetGear = filemenu.Append(wx.ID_ANY, "Set &Gear..."," Print")
-        menuSetAlphabets = filemenu.Append(wx.ID_ANY, "Set &Alphabets..."," Set Alphabets...")
+		filemenu = wx.Menu()
+		helpmenu = wx.Menu()
+		menuAbout = helpmenu.Append(wx.ID_ABOUT, "&About"," About this program")
+		menuSetGear = filemenu.Append(wx.ID_ANY, "Set &Gear..."," Print")
+		menuSetAlphabets = filemenu.Append(wx.ID_ANY, "Set &Alphabets..."," Set Alphabets...")
 		menuSetStartingAlphabet = filemenu.Append(wx.ID_ANY, "Set &Starting Alphabet..."," Set Starting Alphabet...")
-        menuPrint = filemenu.Append(wx.ID_PRINT, "&Print..."," Set Alphabets")
-        menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Exit program")
-        
-        menuBar = wx.MenuBar()
-        menuBar.Append(filemenu,"&File")
-        menuBar.Append(helpmenu,"&Help")
-        self.SetMenuBar(menuBar)
-
-        self.Bind(wx.EVT_MENU, self.Print, menuPrint)
-        self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
-        self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
-        self.Bind(wx.EVT_MENU, self.SetGear, menuSetGear)
-        self.Bind(wx.EVT_MENU, self.SetAlphabets, menuSetAlphabets)
+		menuPrint = filemenu.Append(wx.ID_PRINT, "&Print..."," Set Alphabets")
+		menuExit = filemenu.Append(wx.ID_EXIT,"E&xit"," Exit program")
+		
+		menuBar = wx.MenuBar()
+		menuBar.Append(filemenu,"&File")
+		menuBar.Append(helpmenu,"&Help")
+		self.SetMenuBar(menuBar)
+		
+		self.Bind(wx.EVT_MENU, self.Print, menuPrint)
+		self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
+		self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
+		self.Bind(wx.EVT_MENU, self.SetGear, menuSetGear)
+		self.Bind(wx.EVT_MENU, self.SetAlphabets, menuSetAlphabets)
 		self.Bind(wx.EVT_MENU, self.SetStartingAlphabet, menuSetStartingAlphabet)
 
     def SetGear(self, e):
@@ -118,10 +118,10 @@ class MainWindow(wx.Frame):
     	ted.Destroy()
 
     def SetStartingAlphabet(self, e):
-    	ted = wx.TextEntryDialog(self, "Set Starting Alphabet (1-6):", "Set Starting Alphabet", defaultValue = "0"),style=wx.TE_MULTILINE|wx.OK|wx.CANCEL)
-    	ted.ShowModal()
-    	self.leb.set_starting_alphabet(ted.GetValue())
-    	ted.Destroy()
+		ted = wx.TextEntryDialog(self, "Set Starting Alphabet (1-6):", "Set Starting Alphabet", defaultValue = unicode(self.leb.starting_alphabet + 1),style=wx.TE_MULTILINE|wx.OK|wx.CANCEL)
+		ted.ShowModal()
+		self.leb.set_starting_alphabet(int(ted.GetValue()) - 1)
+		ted.Destroy()
 
     def OnAbout(self,e):
         dlg = wx.MessageDialog( self, "An implementation of Leibniz' encryption scheme.", "About", wx.OK)
