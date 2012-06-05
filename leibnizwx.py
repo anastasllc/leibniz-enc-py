@@ -111,7 +111,7 @@ class MainWindow(wx.Frame):
     	ted.Destroy()
 
     def SetAlphabets(self, e):
-    	ted = wx.TextEntryDialog(self, "Set Alphabets (newline-delimited) - make sure that each ends with JV in order to ensure proper encoding of blank spaces and line breaks:", "Set Alphabets", defaultValue = self.leb.get_file_contents('cyphers.txt'),style=wx.TE_MULTILINE|wx.OK|wx.CANCEL)
+    	ted = wx.TextEntryDialog(self, "Set Alphabets (newline-delimited):", "Set Alphabets", defaultValue = self.leb.get_file_contents('cyphers.txt'),style=wx.TE_MULTILINE|wx.OK|wx.CANCEL)
     	ted.ShowModal()
     	self.leb.set_alphabets(ted.GetValue())
     	self.leb.set_file_contents('cyphers.txt', ted.GetValue())

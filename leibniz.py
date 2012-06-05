@@ -2,7 +2,7 @@ import sys
 from string import maketrans,translate
 
 class leibniz:
-	def __init__(self, gear = None, alphabets_string = None, alphabet_delimiter = '\n', default_alphabet = "ABCDEFGHIKLMNOPQRSTUWXYZ \n"):
+	def __init__(self, gear = None, alphabets_string = None, alphabet_delimiter = '\n', default_alphabet = "ABCDEFGHIKLMNOPQRSTUWXYZ"):
 		"""constructs class and either sets or reads from disk the alphabets and gear to be used, with the default character set as an optional parameter with default value set to the Latin alphabet used in Leibiz' time"""
 		self.default_alphabet = unicode(default_alphabet)
 		self.starting_alphabet = 0
@@ -36,7 +36,7 @@ class leibniz:
 		alphabets = alph.split(delimiter)
 		appended_alphabets = []
 		for a in alphabets:
-			appended_alphabets.append(a + "JV")
+			appended_alphabets.append(a)
 		self.alphabets = [unicode(a.upper()) for a in appended_alphabets]
 
 	def set_alphabets_from_file(self, filename = 'cyphers.txt'):
